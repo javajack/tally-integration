@@ -1,0 +1,212 @@
+# Tally Integration Guide
+
+> The complete developer guide to parsing XML, syncing data, and building integrations with TallyPrime — India's dominant accounting software used by 7M+ businesses.
+
+This documentation covers everything from sending your first XML request to building a production-grade sync engine. Primary integration format is XML-over-HTTP. Covers pharma distribution and garment/textile verticals.
+
+## Getting Started
+
+- [Welcome](https://javajack.github.io/tally-integartion/getting-started/welcome/): Landing page and documentation overview
+- [What is Tally?](https://javajack.github.io/tally-integartion/getting-started/what-is-tally/): TallyPrime overview, architecture, market position (7M+ businesses), desktop app with embedded HTTP server
+- [Integration Landscape](https://javajack.github.io/tally-integartion/getting-started/integration-landscape/): 5 integration approaches compared — XML-over-HTTP, ODBC, TDL, file-based, Tally.NET Sync
+- [Hello World](https://javajack.github.io/tally-integartion/getting-started/hello-world/): First XML export with curl — fetch company list and stock items
+
+## Tally Fundamentals
+
+- [Company Model](https://javajack.github.io/tally-integartion/tally-fundamentals/company-model/): Company structure, multi-company, GSTIN mapping, financial year patterns
+- [Feature Flags](https://javajack.github.io/tally-integartion/tally-fundamentals/feature-flags/): Inventory, batches, godowns, expiry, tracking — detection and impact
+- [Chart of Accounts](https://javajack.github.io/tally-integartion/tally-fundamentals/chart-of-accounts/): Ledger group hierarchy, Sundry Debtors/Creditors, the Both Sundry problem
+- [Voucher Types](https://javajack.github.io/tally-integartion/tally-fundamentals/voucher-types/): 15 inventory voucher types, is_order_voucher flag, custom types
+- [Units of Measure](https://javajack.github.io/tally-integartion/tally-fundamentals/units-of-measure/): Simple vs compound units, parsing "2 Box of 10 Strip = 20 Strip"
+- [The AlterID System](https://javajack.github.io/tally-integartion/tally-fundamentals/alterid-system/): Monotonic IDs for change detection, watermark pattern, reset handling
+- [Tally Versions](https://javajack.github.io/tally-integartion/tally-fundamentals/tally-versions/): ERP 9 vs TallyPrime pre-7.0 vs TallyPrime 7.0+ differences
+
+## Setup & Operations
+
+- [Enabling HTTP Server](https://javajack.github.io/tally-integartion/setup-operations/enabling-http-server/): Step-by-step port 9000 configuration
+- [First Connection Test](https://javajack.github.io/tally-integartion/setup-operations/first-connection-test/): curl commands and expected responses
+- [Tally.ini Configuration](https://javajack.github.io/tally-integartion/setup-operations/tally-ini-config/): Data path, port, loaded TDLs
+- [Gold vs Silver Licensing](https://javajack.github.io/tally-integartion/setup-operations/gold-vs-silver/): Single-user vs multi-user implications
+- [Company Loading](https://javajack.github.io/tally-integartion/setup-operations/company-loading/): GUI app requirement, multi-company handling
+- [Port Conflicts](https://javajack.github.io/tally-integartion/setup-operations/port-conflicts/): Detection and resolution
+- [Tally Freezing](https://javajack.github.io/tally-integartion/setup-operations/tally-freezing/): Large export prevention via batching
+- [Concurrent Access](https://javajack.github.io/tally-integartion/setup-operations/concurrent-access/): Silver license scheduling patterns
+- [Downtime Scenarios](https://javajack.github.io/tally-integartion/setup-operations/downtime-scenarios/): 7 failure causes with detection and recovery
+- [Security Hardening](https://javajack.github.io/tally-integartion/setup-operations/security-hardening/): No-auth localhost risks, firewall, TallyVault
+- [Developer Tools](https://javajack.github.io/tally-integartion/setup-operations/developer-tools/): Tally Connector tool, HTTP logging
+- [Installation Detection](https://javajack.github.io/tally-integartion/setup-operations/installation-detection/): Registry keys, paths, version detection
+- [Troubleshooting Errors](https://javajack.github.io/tally-integartion/setup-operations/troubleshooting-errors/): Common errors and debugging checklist
+- [Performance Benchmarks](https://javajack.github.io/tally-integartion/setup-operations/performance-benchmarks/): Export times, memory footprint, batching impact
+- [Best Deployment Windows](https://javajack.github.io/tally-integartion/setup-operations/best-deployment-windows/): CA calendar risk mapping
+
+## XML Protocol
+
+- [The Five Request Types](https://javajack.github.io/tally-integartion/xml-protocol/request-types/): Export Data/Collection/Function, Import, Execute
+- [Export Data](https://javajack.github.io/tally-integartion/xml-protocol/export-data/): Pulling master/report data with XML templates
+- [Export Collection](https://javajack.github.io/tally-integartion/xml-protocol/export-collection/): Collection-based lists with filtering and field selection
+- [Export Function](https://javajack.github.io/tally-integartion/xml-protocol/export-function/): TDL functions for heartbeat and change detection
+- [Import Data](https://javajack.github.io/tally-integartion/xml-protocol/import-data/): Pushing masters and vouchers into Tally
+- [Execute Action](https://javajack.github.io/tally-integartion/xml-protocol/execute-action/): Triggering TDL actions
+- [Inline TDL](https://javajack.github.io/tally-integartion/xml-protocol/inline-tdl/): Embedding TDL in XML requests — zero-install server-side filtering
+- [Batching Rules](https://javajack.github.io/tally-integartion/xml-protocol/batching-rules/): Max 50 vouchers/import, 5000 objects/export, day-by-day strategies
+
+## Parsing XML Responses
+
+- [Response Anatomy](https://javajack.github.io/tally-integartion/parsing-responses/response-structure/): ENVELOPE structure, sizes 1KB to 500MB
+- [Streaming Parsers](https://javajack.github.io/tally-integartion/parsing-responses/streaming-parser/): SAX/StAX approach in Go, Node.js, Python
+- [Quantities](https://javajack.github.io/tally-integartion/parsing-responses/parsing-quantities/): Parsing "2 Box of 10 Strip = 20 Strip"
+- [Amounts](https://javajack.github.io/tally-integartion/parsing-responses/parsing-amounts/): Indian lakh formatting, Dr/Cr convention
+- [Rates](https://javajack.github.io/tally-integartion/parsing-responses/parsing-rates/): Parsing "50.00/Strip"
+- [Dates](https://javajack.github.io/tally-integartion/parsing-responses/parsing-dates/): 6 format variations including YYYYMMDD
+- [Booleans](https://javajack.github.io/tally-integartion/parsing-responses/parsing-booleans/): Yes/No strings, never native booleans
+- [GUIDs](https://javajack.github.io/tally-integartion/parsing-responses/parsing-guids/): 4 formats, treat as opaque strings
+- [Nested Lists](https://javajack.github.io/tally-integartion/parsing-responses/parsing-nested-lists/): LIST fields, UDF namespaces
+- [XML Escaping](https://javajack.github.io/tally-integartion/parsing-responses/xml-escaping/): The ampersand problem — #1 failure cause
+- [Dual Voucher Views](https://javajack.github.io/tally-integartion/parsing-responses/dual-voucher-views/): Accounting vs Invoice view tag differences
+
+## Data Model — Masters
+
+- [Overview](https://javajack.github.io/tally-integartion/data-model-masters/overview/): 11 master tables with relationships
+- [Stock Items](https://javajack.github.io/tally-integartion/data-model-masters/stock-items/): 40+ fields, HSN, GST, aliases, costing methods
+- [Stock Groups](https://javajack.github.io/tally-integartion/data-model-masters/stock-groups/): Hierarchical grouping patterns
+- [Stock Categories](https://javajack.github.io/tally-integartion/data-model-masters/stock-categories/): Cross-cutting classification
+- [Godowns](https://javajack.github.io/tally-integartion/data-model-masters/godowns/): Warehouses, special-purpose locations
+- [Units](https://javajack.github.io/tally-integartion/data-model-masters/units/): Simple and compound with conversion factors
+- [Ledgers](https://javajack.github.io/tally-integartion/data-model-masters/ledgers/): Parties, Both Sundry problem, Inventory Affected flag
+- [Standard Prices](https://javajack.github.io/tally-integartion/data-model-masters/standard-prices/): MRP, Wholesale, Distributor price lists
+- [Bill of Materials](https://javajack.github.io/tally-integartion/data-model-masters/bill-of-materials/): BOM for manufacturing
+- [Voucher Type Master](https://javajack.github.io/tally-integartion/data-model-masters/voucher-type-master/): Standard and custom voucher types
+- [Currency](https://javajack.github.io/tally-integartion/data-model-masters/currency/): Multi-currency and forex handling
+
+## Data Model — Transactions
+
+- [Overview](https://javajack.github.io/tally-integartion/data-model-transactions/overview/): 7 transaction tables, voucher anatomy
+- [Voucher Header](https://javajack.github.io/tally-integartion/data-model-transactions/voucher-header/): Date, type, party, numbering chaos
+- [Accounting Entries](https://javajack.github.io/tally-integartion/data-model-transactions/accounting-entries/): Dr/Cr entries, GST ledgers, balancing
+- [Inventory Entries](https://javajack.github.io/tally-integartion/data-model-transactions/inventory-entries/): Item-wise qty, rate, godown, tracking
+- [Batch Allocations](https://javajack.github.io/tally-integartion/data-model-transactions/batch-allocations/): Batch/expiry dates, MRP-in-batch hack
+- [Bill Allocations](https://javajack.github.io/tally-integartion/data-model-transactions/bill-allocations/): Receivable/payable tracking, aging
+- [Cost Centre & Bank](https://javajack.github.io/tally-integartion/data-model-transactions/cost-centre-bank/): Salesman tracking, cheque details
+
+## Sync Engine
+
+- [Sync Strategy](https://javajack.github.io/tally-integartion/sync-engine/sync-strategy/): Full vs incremental sync decisions
+- [AlterID Watermarking](https://javajack.github.io/tally-integartion/sync-engine/alterid-watermarking/): Core incremental pattern
+- [Six Sync Phases](https://javajack.github.io/tally-integartion/sync-engine/six-sync-phases/): Profile, Masters, Vouchers, Reports, Push, Verify
+- [Company Discovery](https://javajack.github.io/tally-integartion/sync-engine/company-discovery/): Multi-company detection and GSTIN matching
+- [Batching Strategies](https://javajack.github.io/tally-integartion/sync-engine/batching-strategies/): Day-by-day for large companies
+- [Weekly Reconciliation](https://javajack.github.io/tally-integartion/sync-engine/weekly-reconciliation/): GUID comparison, drift detection
+- [Heartbeat Detection](https://javajack.github.io/tally-integartion/sync-engine/heartbeat-detection/): Lightweight polling patterns
+- [Push Queue](https://javajack.github.io/tally-integartion/sync-engine/push-queue/): Local persistence, retry, eventual consistency
+- [Stock Position Truth](https://javajack.github.io/tally-integartion/sync-engine/stock-position-truth/): Why Tally's report is the only source of truth
+
+## Write-Back
+
+- [Why Phase One](https://javajack.github.io/tally-integartion/write-back/why-phase-one/): Write-back is foundational for warehouse visibility
+- [Sales Order XML](https://javajack.github.io/tally-integartion/write-back/sales-order-xml/): Complete XML template with walkthrough
+- [Voucher Lifecycle](https://javajack.github.io/tally-integartion/write-back/voucher-lifecycle/): Create, Alter, Cancel, Delete operations
+- [Pre-Validation](https://javajack.github.io/tally-integartion/write-back/pre-validation/): 8-point checklist before pushing
+- [Auto-Create Masters](https://javajack.github.io/tally-integartion/write-back/auto-create-masters/): Dependency ordering for master creation
+- [Round-Off Handling](https://javajack.github.io/tally-integartion/write-back/round-off-handling/): Dr/Cr balancing to the paisa
+- [Import Response](https://javajack.github.io/tally-integartion/write-back/import-response/): Parsing CREATED/ALTERED/ERRORS
+- [Voucher Numbering](https://javajack.github.io/tally-integartion/write-back/voucher-numbering/): Unique prefixes to avoid collisions
+
+## JSON API (TallyPrime 7.0+)
+
+- [Native JSON Support](https://javajack.github.io/tally-integartion/json-api/native-json-support/): HTTP GET/POST with JSON, no TDL needed
+- [JSON vs XML](https://javajack.github.io/tally-integartion/json-api/json-vs-xml/): Comparison and when to use which
+- [Migration Guide](https://javajack.github.io/tally-integartion/json-api/migration-guide/): Moving from XML to JSON
+
+## ODBC Interface
+
+- [ODBC Setup](https://javajack.github.io/tally-integartion/odbc-interface/odbc-setup/): Enabling and connecting from Excel, Python
+- [SQL Queries](https://javajack.github.io/tally-integartion/odbc-interface/sql-queries/): Tally's $ prefix SQL syntax
+- [Limitations](https://javajack.github.io/tally-integartion/odbc-interface/limitations/): Read-only, limited tables, performance
+
+## TDL & Custom Fields
+
+- [TDL Overview](https://javajack.github.io/tally-integartion/tdl-custom-fields/tdl-overview/): Tally Definition Language and TCP basics
+- [UDF Discovery](https://javajack.github.io/tally-integartion/tdl-custom-fields/udf-discovery/): 4-step algorithm for finding custom fields
+- [Named vs Indexed](https://javajack.github.io/tally-integartion/tdl-custom-fields/named-vs-indexed/): UDF tag degradation when TDL unloaded
+- [Common Addons](https://javajack.github.io/tally-integartion/tdl-custom-fields/common-addons/): Indian-market TDL addon catalog
+- [Custom Voucher Types](https://javajack.github.io/tally-integartion/tdl-custom-fields/custom-voucher-types/): Parent hierarchy, never hardcode names
+- [UDF Storage](https://javajack.github.io/tally-integartion/tdl-custom-fields/udf-storage/): Dynamic key-value storage patterns
+
+## Edge Cases & Gotchas
+
+- [The 20 Nevers](https://javajack.github.io/tally-integartion/edge-cases/twenty-nevers/): Definitive rules for Tally integration
+- [XML Parsing Traps](https://javajack.github.io/tally-integartion/edge-cases/xml-parsing-traps/): Ampersand, dual views, zero-valued
+- [Data Integrity](https://javajack.github.io/tally-integartion/edge-cases/data-integrity/): Negative stock, duplicates, date boundaries
+- [AlterID Edge Cases](https://javajack.github.io/tally-integartion/edge-cases/alterid-edge-cases/): Resets, backwards detection
+- [CA Operations](https://javajack.github.io/tally-integartion/edge-cases/ca-operations/): Ledger renaming, merging, restructuring
+- [Infrastructure](https://javajack.github.io/tally-integartion/edge-cases/infrastructure/): Silver concurrency, large companies, VMs
+- [Tally Downtime](https://javajack.github.io/tally-integartion/edge-cases/tally-downtime/): 7 failures, exponential backoff, cache degradation
+- [Feature Mismatches](https://javajack.github.io/tally-integartion/edge-cases/feature-mismatches/): Silent failures from wrong XML structure
+
+## Real-World Data Patterns
+
+- [Party Naming Chaos](https://javajack.github.io/tally-integartion/real-world-data/party-naming-chaos/): Indian SMB naming conventions
+- [Party Deduplication](https://javajack.github.io/tally-integartion/real-world-data/party-deduplication/): GSTIN matching, 10-step fuzzy algorithm
+- [Stock Item Naming](https://javajack.github.io/tally-integartion/real-world-data/stock-item-naming/): 5 pharma patterns, normalization dictionary
+- [Stock Group Patterns](https://javajack.github.io/tally-integartion/real-world-data/stock-group-patterns/): Therapeutic, brand, schedule grouping
+- [Godown Naming](https://javajack.github.io/tally-integartion/real-world-data/godown-naming/): Simple to hierarchical to special-purpose
+- [Voucher Number Formats](https://javajack.github.io/tally-integartion/real-world-data/voucher-number-formats/): Auto vs manual numbering chaos
+- [Batch Name Patterns](https://javajack.github.io/tally-integartion/real-world-data/batch-name-patterns/): MRP-in-batch hack with regex
+- [Encoding Issues](https://javajack.github.io/tally-integartion/real-world-data/encoding-issues/): UTF-8, Windows-1252, Hindi/Gujarati
+- [Data Quality Matrix](https://javajack.github.io/tally-integartion/real-world-data/data-quality-matrix/): 13 issues rated by frequency
+- [CA Calendar](https://javajack.github.io/tally-integartion/real-world-data/ca-calendar/): Monthly disruption risk mapping
+
+## GST & Compliance
+
+- [GST Fundamentals](https://javajack.github.io/tally-integartion/gst-compliance/gst-fundamentals/): IGST vs CGST+SGST, multiple GSTINs
+- [HSN & SAC Codes](https://javajack.github.io/tally-integartion/gst-compliance/hsn-sac-codes/): Code hierarchy and inheritance
+- [E-Invoicing](https://javajack.github.io/tally-integartion/gst-compliance/e-invoicing/): IRN, QR codes, IRP integration
+- [Price-Dependent GST](https://javajack.github.io/tally-integartion/gst-compliance/price-dependent-gst/): Garment-specific slab rules
+- [Regulatory Timeline](https://javajack.github.io/tally-integartion/gst-compliance/regulatory-timeline/): E-invoicing mandate rollout
+
+## Vertical: Pharma Distribution
+
+- [Overview](https://javajack.github.io/tally-integartion/vertical-pharma/overview/): Pharma stockist business model
+- [Batch & Expiry Tracking](https://javajack.github.io/tally-integartion/vertical-pharma/batch-expiry-tracking/): Regulatory compliance, FEFO picking
+- [Drug Schedules](https://javajack.github.io/tally-integartion/vertical-pharma/drug-schedules/): H, H1, X schedules via UDFs
+- [Schemes & Free Goods](https://javajack.github.io/tally-integartion/vertical-pharma/schemes-free-goods/): 3 methods for free goods tracking
+- [Salesman Tracking](https://javajack.github.io/tally-integartion/vertical-pharma/salesman-tracking/): Cost Centre vs UDF patterns
+- [Pharma Stock Naming](https://javajack.github.io/tally-integartion/vertical-pharma/pharma-stock-naming/): 5 patterns with normalization
+
+## Vertical: Garment & Textiles
+
+- [Overview](https://javajack.github.io/tally-integartion/vertical-garments/overview/): 10K-100K+ SKUs, seasonal cycles
+- [Size-Color Matrix](https://javajack.github.io/tally-integartion/vertical-garments/size-color-matrix/): No native Tally support, 30-SKU explosion
+- [Four Approaches](https://javajack.github.io/tally-integartion/vertical-garments/four-approaches/): Flat SKU, Category, Batch, UDF variants
+- [Variant Detection](https://javajack.github.io/tally-integartion/vertical-garments/variant-detection/): Algorithm with 80% threshold
+- [Size Tokens](https://javajack.github.io/tally-integartion/vertical-garments/size-tokens/): Letter, numeric, kids, traditional, footwear
+- [Color Tokens](https://javajack.github.io/tally-integartion/vertical-garments/color-tokens/): Names, abbreviations, patterns
+- [Delivery Challans](https://javajack.github.io/tally-integartion/vertical-garments/delivery-challans/): Consignment and in-transit inventory
+- [Credit & Hundi](https://javajack.github.io/tally-integartion/vertical-garments/credit-hundi/): 30-90 day terms, trade bills
+- [Brokers & Agents](https://javajack.github.io/tally-integartion/vertical-garments/brokers-agents/): Commission tracking patterns
+- [Complex Returns](https://javajack.github.io/tally-integartion/vertical-garments/complex-returns/): Size/color exchanges, defective, bulk
+- [Set Splitting](https://javajack.github.io/tally-integartion/vertical-garments/set-splitting/): Suit sets purchased as unit, sold as pieces
+- [Garment TDL Addons](https://javajack.github.io/tally-integartion/vertical-garments/garment-tdl-addons/): TDLStore, TallyPlanet, Antraweb
+- [Pharma vs Garments](https://javajack.github.io/tally-integartion/vertical-garments/pharma-vs-garments/): 14-dimension comparison
+
+## Architecture Reference
+
+- [Three-Tier Overview](https://javajack.github.io/tally-integartion/architecture/three-tier-overview/): Stockist machine, Central API, Consumers
+- [Go Connector Design](https://javajack.github.io/tally-integartion/architecture/go-connector-design/): Why Go, module structure
+- [SQLite Local Cache](https://javajack.github.io/tally-integartion/architecture/sqlite-local-cache/): Schema, metadata tables, resilience
+- [PostgreSQL Central](https://javajack.github.io/tally-integartion/architecture/postgresql-central/): Multi-tenant schema design
+- [REST API Design](https://javajack.github.io/tally-integartion/architecture/rest-api-design/): 12 endpoints for sales fleet
+- [TOML Configuration](https://javajack.github.io/tally-integartion/architecture/toml-configuration/): Full config reference
+- [Tally Profile Detection](https://javajack.github.io/tally-integartion/architecture/tally-profile-detection/): First-connect profiling
+- [Filesystem Scanning](https://javajack.github.io/tally-integartion/architecture/filesystem-scanning/): Finding Tally on Windows
+- [Testing Strategies](https://javajack.github.io/tally-integartion/architecture/testing-strategies/): Test Tally setup, fixtures, CI/CD
+- [Monitoring](https://javajack.github.io/tally-integartion/architecture/monitoring-observability/): Logging, health checks, alerting
+- [Risk Register](https://javajack.github.io/tally-integartion/architecture/risk-register/): All risks with probability and mitigation
+
+## Community & Open Source
+
+- [Ecosystem Overview](https://javajack.github.io/tally-integartion/community/ecosystem-overview/): OSS, commercial, unified API landscape
+- [tally-database-loader](https://javajack.github.io/tally-integartion/community/tally-database-loader/): Node.js gold-standard (500+ stars)
+- [Commercial Platforms](https://javajack.github.io/tally-integartion/community/commercial-platforms/): API2Books, Suvit, RootFi, CData
+- [Language Recipes](https://javajack.github.io/tally-integartion/community/language-recipes/): Python, Node.js, C#, Go, Java snippets
+- [Build vs Buy](https://javajack.github.io/tally-integartion/community/build-vs-buy/): Decision framework and TCO analysis

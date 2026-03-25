@@ -1,0 +1,91 @@
+---
+title: "Tally Integration Guide"
+description: "The complete developer guide to parsing XML, syncing data, and building on top of TallyPrime."
+template: splash
+hero:
+  tagline: "The complete developer guide to parsing XML and integrating with TallyPrime — from first HTTP request to production sync engine."
+  image:
+    file: ../../../assets/houston.webp
+  actions:
+    - text: What is Tally?
+      link: /tally-integartion/getting-started/what-is-tally/
+      icon: right-arrow
+    - text: Hello World
+      link: /tally-integartion/getting-started/hello-world/
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## What You'll Learn
+
+Everything you need to build a reliable,
+production-grade integration with TallyPrime.
+
+<CardGrid stagger>
+  <Card title="XML Protocol" icon="document">
+    Master the XML-over-HTTP envelope format
+    that powers every Tally integration.
+    Requests, responses, inline TDL,
+    and all the quirks.
+  </Card>
+
+  <Card title="Data Model" icon="list-format">
+    Navigate Tally's hierarchy of masters
+    and transactions — Stock Items, Godowns,
+    Ledgers, Vouchers, Batches, and more.
+  </Card>
+
+  <Card title="Sync Engine" icon="rocket">
+    Build incremental sync with AlterID-based
+    change detection, day-level batching,
+    and a local SQLite cache that never
+    loses a record.
+  </Card>
+
+  <Card title="Write-Back" icon="pencil">
+    Push Sales Orders, create Party Ledgers,
+    and handle the full voucher lifecycle —
+    Create, Alter, Cancel, Delete.
+  </Card>
+
+  <Card title="Edge Cases" icon="warning">
+    Quantity strings with embedded units,
+    debit-negative amounts, Yes/No booleans,
+    UDF namespaces, and the dreaded
+    Tally-freeze-on-large-export.
+  </Card>
+
+  <Card title="Architecture" icon="setting">
+    A local Go/Rust sidecar connector,
+    SQLite cache, central PostgreSQL,
+    and a REST API for downstream apps.
+    Multi-tenant from day one.
+  </Card>
+</CardGrid>
+
+## Who Is This For?
+
+You're a backend developer building something
+that talks to TallyPrime. Maybe you're syncing
+inventory to a mobile app. Maybe you're
+automating order flow for a distributor.
+Maybe you just want to pull a stock list
+without losing your mind to XML.
+
+This guide has you covered.
+
+## How to Read This Guide
+
+Start with **What is Tally?** if you're new
+to the ecosystem. Jump to **Hello World** if
+you want to fire a request in the next
+two minutes. Browse the sidebar for deep
+dives into specific topics.
+
+Every code sample is copy-paste ready.
+Every gotcha is called out with a warning.
+Every diagram is mobile-friendly.
+
+Let's go.
