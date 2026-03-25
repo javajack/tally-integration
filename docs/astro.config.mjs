@@ -153,7 +153,7 @@ export default defineConfig({
         {
           label: 'Getting Started',
           items: [
-            { label: 'Welcome', slug: 'getting-started/welcome' },
+            { label: 'Welcome', slug: '' },
             { label: 'What is Tally?', slug: 'getting-started/what-is-tally' },
             { label: 'Integration Landscape', slug: 'getting-started/integration-landscape' },
             { label: 'Hello World — Your First Export', slug: 'getting-started/hello-world' },
